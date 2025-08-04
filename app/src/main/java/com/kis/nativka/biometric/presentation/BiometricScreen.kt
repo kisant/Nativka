@@ -12,29 +12,55 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.kis.nativka.R
+import com.kis.nativka.ui.theme.Dimens
 
 @Composable
-fun BiometricScreen(
+internal fun BiometricScreen(
     modifier: Modifier = Modifier,
-    onAuthenticate: () -> Unit,
-    authResult: Boolean?
+    uiState: BiometricScreenUiState,
+    onAuthenticate: () -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(Dimens.ScreenPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = onAuthenticate) {
-            Text("Enter with biometry")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        when (authResult) {
-            true -> Text("Authentication success", color = MaterialTheme.colorScheme.primary)
-            false -> Text("Authentication error", color = MaterialTheme.colorScheme.error)
-            null -> {}
+        when (uiState) {
+            is BiometricScreenUiState.ReadyToAuthenticate -> {
+                ReadyToAuthenticateContent(onAuthenticate = onAuthenticate)
+            }
+            is BiometricScreenUiState.AuthenticationResult -> {
+                AuthenticationResultContent(isAuthenticated = uiState.isAuthenticated)
+            }
         }
     }
+}
+
+@Composable
+private fun ReadyToAuthenticateContent(onAuthenticate: () -> Unit) {
+    Text(
+        text = stringResource(R.string.biometric_title),
+        style = MaterialTheme.typography.titleMedium
+    )
+    Spacer(modifier = Modifier.height(Dimens.ItemSpacingMedium))
+    Button(onClick = onAuthenticate) {
+        Text(stringResource(R.string.biometric_authenticate_button))
+    }
+}
+
+@Composable
+private fun AuthenticationResultContent(isAuthenticated: Boolean) {
+    val messageId = if (isAuthenticated) {
+        R.string.biometric_auth_success
+    } else {
+        R.string.biometric_auth_error
+    }
+    Text(
+        text = stringResource(id = messageId),
+        style = MaterialTheme.typography.titleMedium
+    )
 }
