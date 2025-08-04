@@ -1,6 +1,5 @@
 package com.kis.nativka.biometric.data.repository
 
-import android.content.Context
 import android.util.Log
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -18,16 +17,15 @@ class BiometricRepositoryImpl @Inject constructor() : BiometricRepository {
     }
 
     override suspend fun authenticateWithBiometrics(
-        context: Context
+        activity: FragmentActivity
     ): Boolean = suspendCoroutine { continuation ->
-        val activity = context as? FragmentActivity
-            ?: throw IllegalArgumentException("Context must be FragmentActivity")
-        val executor = ContextCompat.getMainExecutor(context)
+        Log.d(TAG, "authenticateWithBiometrics called with activity: ${activity.javaClass.simpleName}")
+        val executor = ContextCompat.getMainExecutor(activity)
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(context.getString(R.string.biometric_title))
-            .setSubtitle(context.getString(R.string.biometric_subtitle))
-            .setNegativeButtonText(context.getString(R.string.biometric_cancel))
+            .setTitle(activity.getString(R.string.biometric_title))
+            .setSubtitle(activity.getString(R.string.biometric_subtitle))
+            .setNegativeButtonText(activity.getString(R.string.biometric_cancel))
             .build()
 
         var isResumed = false

@@ -1,9 +1,9 @@
 package com.kis.nativka.biometric.presentation
 
-import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kis.nativka.biometric.domain.usecase.CheckBiometricAvailabilityUseCase
+import com.kis.nativka.biometric.domain.usecase.BiometricAuthenticationUseCase
 import com.kis.nativka.biometric.presentation.BiometricScreenUiEvent.OnAuthenticateClick
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,20 +23,20 @@ internal sealed interface BiometricScreenUiState {
 
 @HiltViewModel
 internal class BiometricViewModel @Inject constructor(
-    private val checkBiometricUseCase: CheckBiometricAvailabilityUseCase
+    private val authenticateUser: BiometricAuthenticationUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<BiometricScreenUiState>(BiometricScreenUiState.ReadyToAuthenticate)
     val uiState: StateFlow<BiometricScreenUiState> = _uiState.asStateFlow()
 
-    fun onEvent(event: BiometricScreenUiEvent, context: Context) {
+    fun onEvent(event: BiometricScreenUiEvent, activity: FragmentActivity) {
         when (event) {
-            is OnAuthenticateClick -> authenticateWithBiometrics(context)
+            is OnAuthenticateClick -> authenticateWithBiometrics(activity)
         }
     }
 
-    fun authenticateWithBiometrics(context: Context) = viewModelScope.launch {
-        val isAuthenticated = checkBiometricUseCase(context)
+    fun authenticateWithBiometrics(activity: FragmentActivity) = viewModelScope.launch {
+        val isAuthenticated = authenticateUser(activity)
         _uiState.value = BiometricScreenUiState.AuthenticationResult(isAuthenticated)
     }
 }
