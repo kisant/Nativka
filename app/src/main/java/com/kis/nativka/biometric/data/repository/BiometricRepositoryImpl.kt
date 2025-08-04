@@ -1,21 +1,19 @@
 package com.kis.nativka.biometric.data.repository
 
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.kis.nativka.biometric.domain.repository.BiometricRepository
-import kotlin.coroutines.resume
 import javax.inject.Inject
+import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class BiometricRepositoryImpl @Inject constructor() : BiometricRepository {
     override suspend fun authenticateWithBiometrics(
-        activity: FragmentActivity
+        context: Context
     ): Boolean = suspendCoroutine { continuation ->
-        val executor = ContextCompat.getMainExecutor(activity)
+        val executor = ContextCompat.getMainExecutor(context)
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Biometric Authentication")
@@ -24,7 +22,7 @@ class BiometricRepositoryImpl @Inject constructor() : BiometricRepository {
             .build()
 
         val biometricPrompt = BiometricPrompt(
-            activity,
+            context as FragmentActivity,
             executor,
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {

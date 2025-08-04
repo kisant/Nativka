@@ -1,6 +1,6 @@
 package com.kis.nativka.biometric.presentation
 
-import androidx.fragment.app.FragmentActivity
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kis.nativka.biometric.domain.usecase.CheckBiometricAvailabilityUseCase
@@ -13,9 +13,9 @@ class BiometricViewModel @Inject constructor(
     private val checkBiometricUseCase: CheckBiometricAvailabilityUseCase
 ) : ViewModel() {
 
-    suspend fun authenticateWithBiometrics(
-        activity: FragmentActivity, onResult: (Boolean) -> Unit
+    fun authenticateWithBiometrics(
+        context: Context, onResult: (Boolean) -> Unit
     ) = viewModelScope.launch {
-        onResult(checkBiometricUseCase(activity))
+        onResult(checkBiometricUseCase(context))
     }
 }

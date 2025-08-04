@@ -1,7 +1,7 @@
 package com.kis.nativka.biometric.domain.repository
 
-import androidx.fragment.app.FragmentActivity
+import android.content.Context
 
 interface BiometricRepository {
-    suspend fun authenticateWithBiometrics(activity: FragmentActivity): Boolean
+    suspend fun authenticateWithBiometrics(context: Context): Boolean
 }
