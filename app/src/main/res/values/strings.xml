@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">Nativka</string>
 
+    <string name="biometric_nav_label">BIO"</string>
+    <string name="biometric_nav_description">Open Biometric screen"</string>
+    <string name="tee_nav_label">TEE"</string>
+    <string name="tee_nav_description">Open TEE screen"</string>
+    <string name="nfc_nav_label">NFC"</string>
+    <string name="nfc_nav_description">Open NFC screen"</string>
+    <string name="ble_nav_label">BLE"</string>
+    <string name="ble_nav_description">Open BLE screen"</string>
+    <string name="omapi_nav_label">OMAPI"</string>
+    <string name="omapi_nav_description">Open OMAPI screen"</string>
+
     <string name="biometric_title">Biometric Authentication</string>
     <string name="biometric_subtitle">Please authenticate to continue</string>
     <string name="biometric_cancel">Cancel</string>
